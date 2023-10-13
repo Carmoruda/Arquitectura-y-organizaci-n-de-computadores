@@ -4,20 +4,29 @@
 
 begin:          di              ; Deshabilitar interrupciones
                 ld sp,0         ; Establecer el puntero de pila en la parte alta de la memoria
-                ld hl, $5800     ; En el primer cuadrado de la pantalla. 
-                ld a, 0
+                ld hl, $5800    ; En el primer cuadrado de la pantalla. 
 
 ;-------------------------------------------------------------------------------------------------
 
 main:
+        ld c, 7 * 8     ; Color.
 
-                ld  b, %00100000 ; Verde
-                ld (hl), b       ; Hacer el cuadrado rojo 
-                inc a  ; inc a   
-                cp 32            ; if (a != 32)fk
-                inc hl
-                jr nz, main       
+paintLine:
+        ld b, 8
+        push bc
+        ld b, 4
+paintColor:
+        ld (hl), c              ; Pintar cuadrado del color.
+        inc hl                  ; Siguiente cuadrado.
+        djnz paintColor         ; Pintar 4 cuadrados
+        pop bc
+        push af
+        ld a, c
+        sub 8
+        ld c, a
+        pop af
+        djnz paintLine          ; Pintar 1 línea
 
 ;-------------------------------------------------------------------------------------------------
 endofcode:            
-                jr endofcode          ; Bucle infinito
+        jr endofcode          ; Bucle infinito

@@ -1,0 +1,36 @@
+# file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm
+ 1    0000                      DEVICE ZXSPECTRUM48
+ 2    0000              	SLDOPT COMMENT WPMEM, LOGPOINT, ASSETION
+ 3    0000                      org $8000               ; Programa ubicado a partir de $8000 = 32768
+ 4    8000
+ 5    8000 F3           begin:          di              ; Deshabilitar interrupciones
+ 6    8001 31 00 00                     ld sp,0         ; Establecer el puntero de pila en la parte alta de la memoria
+ 7    8004 21 00 58                     ld hl, $5800    ; En el primer cuadrado de la pantalla.
+ 8    8007
+ 9    8007              ;-------------------------------------------------------------------------------------------------
+10    8007
+11    8007              main:
+12    8007 0E 38                ld c, 7 * 8     ; Color.
+13    8009
+14    8009              paintLine:
+15    8009 06 08                ld b, 8
+16    800B C5                   push bc
+17    800C 06 04                ld b, 4
+18    800E              paintColor:
+19    800E 71                   ld (hl), c              ; Pintar cuadrado del color.
+20    800F 23                   inc hl                  ; Siguiente cuadrado.
+21    8010 10 FC                djnz paintColor
+22    8012 C1                   pop bc
+23    8013 F5                   push af
+24    8014 79                   ld a, c
+25    8015 D6 08                sub 8
+26    8017 4F                   ld c, a
+27    8018 F1                   pop af
+28    8019 10 EE                djnz paintLine
+29    801B 18 EA                jr main
+30    801D
+31    801D              ;-------------------------------------------------------------------------------------------------
+32    801D              endofcode:
+33    801D 18 FE                jr endofcode          ; Bucle infinito
+34    801F
+# file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm
