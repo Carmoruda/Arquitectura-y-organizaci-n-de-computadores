@@ -1,32 +1,30 @@
         DEVICE ZXSPECTRUM48
 	SLDOPT COMMENT WPMEM, LOGPOINT, ASSETION
-        org $8000               ; Programa ubicado a partir de $8000 = 32768
+        ORG $8000               ; Programa ubicado a partir de $8000 = 32768
 
-begin:          di              ; Deshabilitar interrupciones
-                ld sp,0         ; Establecer el puntero de pila en la parte alta de la memoria
-                ld hl, $5800    ; En el primer cuadrado de la pantalla. 
+BEGIN:          
+        DI              ; Deshabilitar interrupciones
+        LD SP, 0        ; Establecer el puntero de pila en la parte alta de la memoria
+        LD HL, $5800    ; Primer cuadrado de la pantalla. 
+MAIN:
+        LD C, 0         ; Color inicial (negro).
+PAINTLINE:
+        LD A, 8         ; i (Contador PAINTLINE).
+        LD B, 4         ; j (Contador PAINTCOLOR).
+PAINTCOLOR:
+        LD (HL), C              ; Pintar cuadrado del color.
+        INC HL                  ; Siguiente cuadrado.
+        DJNZ PAINTCOLOR
+CHANGECOLOR:
+        PUSH AF
+        LD A, C
+        ADD 8                   ; Cambiar color.
+        AND %00111000           ; Solo color paper.
+        LD C, A
+        LD A, L
+        CP $5B                  ; while (HL != $5B00)
+        POP AF
+        JR NZ, PAINTLINE
 
-;-------------------------------------------------------------------------------------------------
-
-main:
-        ld c, 7 * 8     ; Color.
-
-paintLine:
-        ld b, 8
-        push bc
-        ld b, 4
-paintColor:
-        ld (hl), c              ; Pintar cuadrado del color.
-        inc hl                  ; Siguiente cuadrado.
-        djnz paintColor         ; Pintar 4 cuadrados
-        pop bc
-        push af
-        ld a, c
-        sub 8
-        ld c, a
-        pop af
-        djnz paintLine          ; Pintar 1 línea
-
-;-------------------------------------------------------------------------------------------------
-endofcode:            
-        jr endofcode          ; Bucle infinito
+ENDOFCODE:            
+        JR ENDOFCODE
