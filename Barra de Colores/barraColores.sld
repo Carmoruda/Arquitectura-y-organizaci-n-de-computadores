@@ -20,11 +20,11 @@ C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-co
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|17||0|2|32783|F|CHANGECOLOR
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|17||0|2|32783|L|,CHANGECOLOR,
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|18||0|2|32783|T|
-C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|19||0|2|32785|T|
-C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|20||0|2|32787|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|19||0|2|32784|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|20||0|2|32786|T|
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|21||0|2|32788|T|
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|22||0|2|32789|T|
-C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|23||0|2|32791|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|23||0|2|32790|T|
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|24||0|2|32792|T|
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|26||0|2|32794|F|ENDOFCODE
 C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\barraColores.asm|26||0|2|32794|L|,ENDOFCODE,,+used
