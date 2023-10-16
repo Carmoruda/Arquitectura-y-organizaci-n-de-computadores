@@ -1,0 +1,31 @@
+|SLD.data.version|1
+||K|KEYWORDS|WPMEM,LOGPOINT,ASSETION
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|1||0|-1|-1|Z|pages.size:16384,pages.count:4,slots.count:4,slots.adr:0,16384,32768,49152
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|5||0|2|32768|F|BEGIN
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|5||0|2|32768|L|,BEGIN,
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|6||0|2|32768|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|7||0|2|32769|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|8||0|2|32772|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|9||0|2|32775|F|MAIN
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|9||0|2|32775|L|,MAIN,
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|10||0|2|32775|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|11||0|2|32777|F|PAINTLINE
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|11||0|2|32777|L|,PAINTLINE,,+used
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|12||0|2|32777|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|13||0|2|32779|F|PAINTCOLOR
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|13||0|2|32779|L|,PAINTCOLOR,,+used
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|14||0|2|32779|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|15||0|2|32780|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|16||0|2|32781|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|17||0|2|32783|F|CHANGECOLOR
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|17||0|2|32783|L|,CHANGECOLOR,
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|18||0|2|32783|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|19||0|2|32784|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|20||0|2|32786|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|21||0|2|32788|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|22||0|2|32789|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|23||0|2|32790|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|24||0|2|32792|T|
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|26||0|2|32794|F|ENDOFCODE
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|26||0|2|32794|L|,ENDOFCODE,,+used
+C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\Barra de Colores\colorBars.asm|27||0|2|32794|T|
