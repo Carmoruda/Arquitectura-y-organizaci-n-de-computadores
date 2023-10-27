@@ -1,0 +1,192 @@
+# file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\HelloWorld\hello_world.asm
+  1   0000                      DEVICE ZXSPECTRUM48
+  2   0000              	SLDOPT COMMENT WPMEM, LOGPOINT, ASSETION
+  3   0000                      org $8000               ; Program located at $8000 = 32768.
+  4   8000
+  5   8000              BEGIN:
+  6   8000 F3                   DI              ; Disable interruptions.
+  7   8001 31 00 00             LD SP, 0        ; Set the stack pointer to the top of memory.
+  8   8004 21 00 58             LD HL, $5800    ; First square of the screen.
+  9   8007
+ 10   8007              MAIN:
+ 11   8007 3E 81                LD A, $81       ; Atributo
+ 12   8009 06 04                LD B, 4         ;
+ 13   800B 0E 05                LD C, 5         ;
+ 14   800D DD 21 16 80          LD IX, MESSAGEWRITE
+ 15   8011 CD 21 80             CALL PRINTAT
+ 16   8014
+ 17   8014              ENDOFCODE:
+ 18   8014 18 FE                JR ENDOFCODE
+ 19   8016
+ 20   8016 48 6F 6C 61  MESSAGEWRITE: DB "Hola Mundo", 0        ; 0 al final porque todos los arrays acaban como 0. Delimitador de array.
+ 20   801A 20 4D 75 6E
+ 20   801E 64 6F 00
+ 21   8021                      INCLUDE "L30.3 - printat.asm"
+# file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\HelloWorld\L30.3 - printat.asm
+  1+  8021              ; -------------------------------
+  2+  8021              ; ZX Spectrum Text print library
+  3+  8021              ; Daniel León - AOC - UFV 2020
+  4+  8021              ; -------------------------------
+  5+  8021
+  6+  8021
+  7+  8021              ; ----------------------------------------------------------------------------------------
+  8+  8021              ; PRINTAT - Print a string in a position and attributes as per registers:
+  9+  8021              ;		IN	A	: Bit 7=1 For Flash / Bit 6=1 For Brigh / Bit 5,4,3 for Paper / Bit 2,1,0 for Ink
+ 10+  8021              ;		IN	B	: Row 0..23
+ 11+  8021              ;		IN	C	: Column 0..31
+ 12+  8021              ;		IN	IX	: Address of text (Text must end in a 0)
+ 13+  8021              ; ----------------------------------------------------------------------------------------
+ 14+  8021 CD 30 80     PRINTAT:	CALL PREP_PRT				; Update Attribute var &Screen & Attributes pointers
+ 15+  8024              ; ----------------------------------------------------------------------------------------
+ 16+  8024              ;		VVV Do not move PRINTSTR below as PRINTAT continues into PRINTSTR routine
+ 17+  8024              ; ----------------------------------------------------------------------------------------
+ 18+  8024              ; PRINTSTR - Prints String - IX Points to the String start
+ 19+  8024              ; ----------------------------------------------------------------------------------------
+ 20+  8024 DD 7E 00     PRINTSTR:   LD A,(IX)					; A Contains first char to print
+ 21+  8027 B7           			OR A						; check for end of string (0)
+ 22+  8028 C8           			RET Z						; Finish printing if 0
+ 23+  8029 CD 5E 80     			CALL PRINTCHNUM
+ 24+  802C DD 23        			INC IX						; Move to next char in string
+ 25+  802E 18 F4        			JR PRINTSTR					; Start over printing sequence
+ 26+  8030              ; ----------------------------------------------------------------------------------------
+ 27+  8030
+ 28+  8030
+ 29+  8030              ;-----------------------------------------------------------------------------------------
+ 30+  8030              ; PREP_PRT - Updates Print_Attr, SCR & ATTR Vars
+ 31+  8030              ;-----------------------------------------------------------------------------------------
+ 32+  8030 32 A4 80     PREP_PRT:	LD (PRINT_ATTR),A			; Set Attribute
+ 33+  8033 CD 39 80     PREP_PRT_2:	CALL CRtoSCREEN
+ 34+  8036 C3 4B 80     			JP CRtoATTR
+ 35+  8039              ;-----------------------------------------------------------------------------------------
+ 36+  8039
+ 37+  8039              ;-----------------------------------------------------------------------------------------
+ 38+  8039              ; CRtoSCREEN - Converts a scr char coord into a SCREEN Address   b,c = y,x positions
+ 39+  8039              ;	IN  - B=Row, C=Column
+ 40+  8039              ;	OUT - HL=Address in screen also stored in (SCR_CUR_PTR)
+ 41+  8039              ;	Conversion:
+ 42+  8039              ;			Row FFfff   Column CCCCC
+ 43+  8039              ;			HL=%010FF000 fffCCCCC
+ 44+  8039              ;-----------------------------------------------------------------------------------------
+ 45+  8039              CRtoSCREEN:
+ 46+  8039 78           			LD A,B						; %___FFfff
+ 47+  803A F6 40        			OR #40						; %010FFfff
+ 48+  803C E6 F8        			AND #F8						; %010FF000
+ 49+  803E 67           			LD H,A
+ 50+  803F
+ 51+  803F 78           			LD A,B						; %___FFfff
+ 52+  8040 E6 07        			AND #7						; %00000fff
+ 53+  8042 0F           			RRCA						; %f00000ff
+ 54+  8043 0F           			RRCA						; %ff00000f
+ 55+  8044 0F           			RRCA						; %fff00000
+ 56+  8045 B1           			OR C						; %fffCCCCC
+ 57+  8046 6F           			LD L,A
+ 58+  8047 22 A0 80                 LD (SCR_CUR_PTR),HL			; Update Variable
+ 59+  804A C9                       RET
+ 60+  804B              ; ----------------------------------------------------------------------------------------
+ 61+  804B
+ 62+  804B
+ 63+  804B
+ 64+  804B              ;-----------------------------------------------------------------------------------------
+ 65+  804B              ; CRtoATTR - Converts a screen char coord  into a ATTR Address  b,c = y,x positions
+ 66+  804B              ;	IN  - B=Row, C=Column
+ 67+  804B              ;	OUT - HL=Address in screen also stored in (SCR_ATTR_PTR)
+ 68+  804B              ;	Conversion:
+ 69+  804B              ;			Row FFfff   Column CCCCC
+ 70+  804B              ;			HL=%010110FF fffCCCCC
+ 71+  804B              ;-----------------------------------------------------------------------------------------
+ 72+  804B              CRtoATTR:
+ 73+  804B 78           			LD A,B						; %___FFfff
+ 74+  804C 0F           			RRCA						; %f000FFff
+ 75+  804D 0F           			RRCA						; %ff000FFf
+ 76+  804E 0F           			RRCA						; %fff000FF
+ 77+  804F 6F           			LD L,A
+ 78+  8050 E6 03        			AND 3						; %000000FF	value of FF can be only 00,01,10
+ 79+  8052 F6 58        			OR #58						; %010110FF value will be #58, #59 or #5A
+ 80+  8054 67           			LD H,A
+ 81+  8055
+ 82+  8055 7D           			LD A,L						; %fff000FF
+ 83+  8056 E6 E0        			AND #E0						; %fff00000
+ 84+  8058 B1           			OR C						; %fffCCCCC
+ 85+  8059 6F           			LD L,A
+ 86+  805A
+ 87+  805A 22 A2 80                 LD (SCR_ATTR_PTR),HL		; Update Variable
+ 88+  805D C9                       RET
+ 89+  805E              ; ----------------------------------------------------------------------------------------
+ 90+  805E
+ 91+  805E
+ 92+  805E
+ 93+  805E              ; ----------------------------------------------------------------------------------------
+ 94+  805E              ; PRINTCHNUM - Prints Char Number N (stored in A)
+ 95+  805E              ;-----------------------------------------------------------------------------------------
+ 96+  805E              PRINTCHNUM:	;SUB 32						; Adjust Ascii to charset
+ 97+  805E 26 00        			LD H,0						; Multiply value by 8 to get to right Char in Charset
+ 98+  8060 6F           			LD L,A
+ 99+  8061 29           			ADD HL,HL
+100+  8062 29           			ADD HL,HL
+101+  8063 29           			ADD HL,HL
+102+  8064 11 A5 7F     			LD DE, CHARSET-(8*32)		; Optimize in compile time (instead of sub 32)
+103+  8067 19           			ADD HL,DE
+104+  8068 EB           			EX  DE,HL					;Value in DE
+105+  8069              			; Continues to printchar below
+106+  8069              ; ----------------------------------------------------------------------------------------
+107+  8069
+108+  8069
+109+  8069              ; ----------------------------------------------------------------------------------------
+110+  8069              ; PRINTCHAR - Prints Char  (DE points to the char. Uses HL as last Cur Pointer)
+111+  8069              ; ----------------------------------------------------------------------------------------
+112+  8069              PRINTCHAR:
+113+  8069 06 08        			LD B,8						; 8 Lines per char
+114+  806B 2A A0 80                 LD HL, (SCR_CUR_PTR)		; Load Cursor Pointer y,x
+115+  806E
+116+  806E 1A           BYTEPCHAR:	LD A,(DE)					; Get Char to be printed, first line
+117+  806F 77           			LD (HL),A					; Move to Printing location
+118+  8070 24                       INC H						; inc H so next line in char (ZX Spectrum Screen RAM)
+119+  8071 13                       INC DE 						; next line to be printed
+120+  8072 10 FA                    DJNZ BYTEPCHAR				; Repeat 8 lines
+121+  8074 3A A4 80                 LD A,(PRINT_ATTR) 			; Load Attributes to print char with
+122+  8077 2A A2 80                 LD HL, (SCR_ATTR_PTR)
+123+  807A 77                       LD (HL),A
+124+  807B 21 A2 80                 LD HL, SCR_ATTR_PTR			; Get pointer to ATTR
+125+  807E 34                       INC (HL)					; Move Attribute cursor to next char
+126+  807F 21 A0 80     			LD HL, SCR_CUR_PTR
+127+  8082 34           			INC (HL)					; update Cursor pointer to next position
+128+  8083 C9                       RET
+129+  8084              ; ----------------------------------------------------------------------------------------
+130+  8084
+131+  8084
+132+  8084
+133+  8084              ; ----------------------------------------------------------------------------------------
+134+  8084              ; INK2PAPER - moves ink of attribute stored in (PRINT_ATTR) to paper and sets ink to 0
+135+  8084              ; 				Sets bright 1 and flash 0
+136+  8084              ; ----------------------------------------------------------------------------------------
+137+  8084 3A A4 80     INK2PAPER:	LD A, (PRINT_ATTR)		    ; Get storedAttribute
+138+  8087 E6 07                    AND 7						; get Attr INK in A
+139+  8089 07           			RLCA
+140+  808A 07           			RLCA
+141+  808B 07           			RLCA						; move Ink to Paper
+142+  808C F6 40        			OR 64						; ink 0 bright 1
+143+  808E 32 A4 80     			LD (PRINT_ATTR),A		    ; Get storedAttribute
+144+  8091 C9           			RET
+145+  8092              ; ----------------------------------------------------------------------------------------
+146+  8092
+147+  8092
+148+  8092
+149+  8092
+150+  8092 21 00 40     CLEARSCR:	LD HL,$4000					; Erases screen by writing 0 to all pixels and attributes
+151+  8095 11 01 40     			LD DE,$4001
+152+  8098 01 FF 1A     			LD BC,6911
+153+  809B 36 00        			LD (HL),0
+154+  809D ED B0        			LDIR
+155+  809F C9           			RET
+156+  80A0
+157+  80A0
+158+  80A0              SCR_CUR_PTR
+158+  80A0 00 00          	db $00, $00				; Cursor Pointer in Screen (2 bytes) (HL)
+159+  80A2 00 00        SCR_ATTR_PTR: 	db $00, $00				; Attr Pointer in Screen (2 bytes) (HL)
+160+  80A4 00           PRINT_ATTR:		db $00					; Attribute used by printchar routine (1 byte)
+161+  80A5
+162+  80A5              CHARSET: incbin "charset.bin"			; Charset used
+163+  83A5
+# file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\HelloWorld\L30.3 - printat.asm
+ 22   83A5
+# file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\HelloWorld\hello_world.asm

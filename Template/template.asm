@@ -1,17 +1,13 @@
         DEVICE ZXSPECTRUM48
 	SLDOPT COMMENT WPMEM, LOGPOINT, ASSETION
-        org $8000               ; Programa ubicado a partir de $8000 = 32768
+        org $8000               ; Program located at $8000 = 32768.
 
-inicio:         di              ; Deshabilitar interrupciones
-                ld sp,0         ; Establecer el puntero de pila en la parte alta de la memoria
-        
-;-------------------------------------------------------------------------------------------------
-;Código del estudiante
+BEGIN:          
+        DI              ; Disable interruptions.
+        LD SP, 0        ; Set the stack pointer to the top of memory.
+        LD HL, $5800    ; First square of the screen. 
 
-bucle:
-        ld a, r
-        out ($fe),a
-        jr bucle
+MAIN:
 
-;-------------------------------------------------------------------------------------------------
-fin:            jr fin          ; Bucle infinito
+ENDOFCODE:            
+        JR ENDOFCODE
