@@ -27,9 +27,14 @@ STARTINGSCREEN:
 
 READYKEY:
         LD A, $DF       ; Keys: Y, U, I, O, P
-        IN A, ($FE)     ; Key: Y
-        BIT 4, A
-        JR NZ, READYKEY
+        IN A, ($FE)     
+        BIT 4, A        ; Key: Y
+        JR Z, GAMESCREEN
+READNKEY:
+        LD A, $7F       ; Keys: B, N, M, SYMB, SPACE
+        IN A, ($FE)     
+        BIT 3, A        ; Key: N
+        JR NZ, READYKEY 
 
 ENDINGSCREEN:
         CALL CLEARSCR   ; Clean screen.
@@ -48,6 +53,15 @@ ENDINGSCREEN:
         LD IX, PLAYAGAINMESSAGE
         CALL PRINTAT
 
+GAMESCREEN:
+        CALL CLEARSCR   ; Clean screen.
+
+        ; Bye!
+        LD A, $04       ; Attribute - Green
+        LD B, 2         ; Row
+        LD C, 2         ; Column
+        LD IX, GAMEMESSAGE
+        CALL PRINTAT
 
 ENDOFCODE:            
         JR ENDOFCODE
@@ -56,4 +70,6 @@ WELCOMEMESSAGE: DB "TETRIS!", 0
 PLAYMESSAGE: DB "WOULD YOU LIKE TO PLAY? (Y/N)", 0        ; 0 = delimitador de array.
 BYEMESSAGE: DB "BYE!", 0
 PLAYAGAINMESSAGE: DB "PLAY AGAIN? (Y/N)", 0        ; 0 = delimitador de array.
-        INCLUDE "L30.3 - printat.asm"
+GAMEMESSAGE: DB "GAME", 0        ; 0 = delimitador de array.
+
+        INCLUDE "Printat.asm"
