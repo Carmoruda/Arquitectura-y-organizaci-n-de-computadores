@@ -1,6 +1,9 @@
         DEVICE ZXSPECTRUM48
-	SLDOPT COMMENT WPMEM, LOGPOINT, ASSETION
+	SLDOPT COMMENT WPMEM, LOGPOINT, ASSERTION
         org $8000               ; Program located at $8000 = 32768.
+
+ASCII_Y equ $59
+ASCII_N equ $4E
 
 BEGIN:          
         DI              ; Disable interruptions.
@@ -24,17 +27,11 @@ STARTINGSCREEN:
         LD C, 2         ; Column
         LD IX, PLAYMESSAGE
         CALL PRINTAT
-
-READYKEY:
-        LD A, $DF       ; Keys: Y, U, I, O, P
-        IN A, ($FE)     
-        BIT 4, A        ; Key: Y
-        JR Z, GAMESCREEN
-READNKEY:
-        LD A, $7F       ; Keys: B, N, M, SYMB, SPACE
-        IN A, ($FE)     
-        BIT 3, A        ; Key: N
-        JR NZ, READYKEY 
+        XOR A
+        CALL READYKEY
+        CP 1
+        JP Z, GAMESCREEN
+        JR ENDINGSCREEN
 
 ENDINGSCREEN:
         CALL CLEARSCR   ; Clean screen.
@@ -52,24 +49,40 @@ ENDINGSCREEN:
         LD C, 2         ; Column
         LD IX, PLAYAGAINMESSAGE
         CALL PRINTAT
-
-GAMESCREEN:
-        CALL CLEARSCR   ; Clean screen.
-
-        ; Bye!
-        LD A, $04       ; Attribute - Green
-        LD B, 2         ; Row
+        XOR A
+        CALL READYKEY
+        CP 1
+        JR Z, STARTINGSCREEN
+        LD B, 6         ; Row
         LD C, 2         ; Column
-        LD IX, GAMEMESSAGE
+        LD IX, ENDMESSAGE
         CALL PRINTAT
-
-ENDOFCODE:            
+        LD IX, ENDMESSAGE
+        CALL PRINTAT
         JR ENDOFCODE
+
+READYKEY:
+        LD A, $DF       ; Keys: Y, U, I, O, P
+        IN A, ($FE)     
+        BIT 4, A
+        JR NZ, READNKEY
+        LD A, 1
+        RET
+READNKEY:
+        LD A, $7F       ; Keys: B, N, M, SYMB, SPACE
+        IN A, ($FE)
+        BIT 3, A
+        JR NZ, READYKEY
+        LD A, 2
+        RET
 
 WELCOMEMESSAGE: DB "TETRIS!", 0
 PLAYMESSAGE: DB "WOULD YOU LIKE TO PLAY? (Y/N)", 0        ; 0 = delimitador de array.
 BYEMESSAGE: DB "BYE!", 0
 PLAYAGAINMESSAGE: DB "PLAY AGAIN? (Y/N)", 0        ; 0 = delimitador de array.
-GAMEMESSAGE: DB "GAME", 0        ; 0 = delimitador de array.
+ENDMESSAGE: DB "END!", 0
 
+
+        INCLUDE "GameScreen.asm"
+        INCLUDE "EndScreen.asm"
         INCLUDE "Printat.asm"
