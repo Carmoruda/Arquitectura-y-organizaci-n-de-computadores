@@ -14,15 +14,17 @@ MAIN:
 ; STARTINGSCREEN - Displays the start screen with its corresponding messages.
 ;-----------------------------------------------------------------------------------------
 STARTINGSCREEN:
+        CALL LOADSTARTINGSCREEN
+
         ; Tetris!
-        LD A, $41               ; Attribute - Blue
+        LD A, $39               ; Attribute - Blue font with white background
         LD B, 2                 ; Row
         LD C, 2                 ; Column
         LD IX, WELCOMEMESSAGE   ; Tetris!
         CALL PRINTAT
         
         ; Would you like to play? (y/n)
-        LD A, $41               ; Attribute - Blue
+        LD A, $39              ; Attribute - Blue font with white background
         LD B, 4                 ; Row
         LD C, 2                 ; Column
         LD IX, PLAYMESSAGE      ; Would you like to play? (y/n)
@@ -45,3 +47,5 @@ PLAYMESSAGE: DB "WOULD YOU LIKE TO PLAY? (Y/N)", 0
         INCLUDE "EndScreen.asm"
         INCLUDE "ReadKey.asm"
         INCLUDE "Printat.asm"
+        INCLUDE "LoadStartingScreen.asm"
+        INCLUDE "LoadEndingScreen.asm"
