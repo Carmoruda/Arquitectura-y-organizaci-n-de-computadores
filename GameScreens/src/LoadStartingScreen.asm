@@ -1,3 +1,6 @@
+;-----------------------------------------------------------------------------------------
+; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+;-----------------------------------------------------------------------------------------
 LOADSTARTINGSCREEN:
     LD HL, LOADSTARTINGSCREEN_START ; HL = Starting addres of screen data
 
@@ -7,7 +10,11 @@ LOADSTARTINGSCREEN:
 
     LD DE, $4000 ; Display to video memory area
     LD BC, 6912  ; VidkeoRAM size
+;-----------------------------------------------------------------------------------------
 
+;-----------------------------------------------------------------------------------------
+; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+;-----------------------------------------------------------------------------------------
 LOADSTARTINGSCREEN_LOOP:
     LDI ; (DE) = (HL) , DE++, HL++, BC--
 
@@ -20,5 +27,6 @@ LOADSTARTINGSCREEN_LOOP:
     POP BC
 
     RET
+;-----------------------------------------------------------------------------------------
 
 LOADSTARTINGSCREEN_START: INCBIN "StartingScreenTetris.scr"

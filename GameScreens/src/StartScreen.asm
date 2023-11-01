@@ -15,21 +15,29 @@ MAIN:
 ;-----------------------------------------------------------------------------------------
 STARTINGSCREEN:
         CALL LOADSTARTINGSCREEN
-
-        ; Tetris!
-        LD A, $39               ; Attribute - Blue font with white background
-        LD B, 2                 ; Row
-        LD C, 2                 ; Column
-        LD IX, WELCOMEMESSAGE   ; Tetris!
-        CALL PRINTAT
-        
         ; Would you like to play? (y/n)
         LD A, $39              ; Attribute - Blue font with white background
-        LD B, 4                 ; Row
-        LD C, 2                 ; Column
-        LD IX, PLAYMESSAGE      ; Would you like to play? (y/n)
+        LD B, 6                ; Row
+        LD C, 16               ; Column
+        LD IX, PLAYMESSAGE1    ; Would you
         CALL PRINTAT
         
+        LD A, $39              ; Attribute - Blue font with white background
+        LD B, 8                ; Row
+        LD C, 14               ; Column
+        LD IX, PLAYMESSAGE2    ; like to play
+        CALL PRINTAT
+
+        LD A, $39              ; Attribute - Blue font with white background
+        LD B, 10               ; Row
+        LD C, 16               ; Column
+        LD IX, PLAYMESSAGE3    ; (Y/N)
+        CALL PRINTAT
+        
+        ; Cursor
+        LD HL, $5800 + 10 * 32 + 23    ; Row 10, column 23
+        LD (HL), $8F
+
         XOR A
         CALL READYKEY
         CP 1            
@@ -40,8 +48,9 @@ STARTINGSCREEN:
 ENDOFCODE:            
         JR ENDOFCODE
 
-WELCOMEMESSAGE: DB "TETRIS!", 0
-PLAYMESSAGE: DB "WOULD YOU LIKE TO PLAY? (Y/N)", 0
+PLAYMESSAGE1: DB "WOULD YOU ", 0
+PLAYMESSAGE2: DB "LIKE TO PLAY?", 0
+PLAYMESSAGE3: DB " (Y/N)", 0
 
         INCLUDE "GameScreen.asm"
         INCLUDE "EndScreen.asm"
