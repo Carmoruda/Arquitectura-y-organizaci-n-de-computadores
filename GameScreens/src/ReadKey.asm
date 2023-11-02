@@ -3,10 +3,14 @@
 ;	OUT - A = 1 if Y key is pressed.
 ;-----------------------------------------------------------------------------------------
 READYKEY:
-        LD A, $DF       ; Keys: Y, U, I, O, P
-        IN A, ($FE)     
+        LD BC, $DFFE       ; Keys: Y, U, I, O, P
+        IN A, (C)     
         BIT 4, A        ; Key Y
         JR NZ, READNKEY
+LOOPY:
+        IN A, (C)
+        CP $FF
+        JR NZ, LOOPY
         LD A, 1
         RET
 ;-----------------------------------------------------------------------------------------
@@ -20,6 +24,11 @@ READNKEY:
         IN A, ($FE)
         BIT 3, A        ; Key N
         JR NZ, READYKEY
+LOOPN:
+        IN A, (C)
+        CP $FF
+        JR NZ, LOOPN
         LD A, 2
+        RET
         RET
 ;-----------------------------------------------------------------------------------------

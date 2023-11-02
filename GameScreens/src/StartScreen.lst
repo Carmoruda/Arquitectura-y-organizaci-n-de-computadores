@@ -9,31 +9,31 @@
   8   8004 21 00 58             LD HL, $5800    ; First square of the screen.
   9   8007
  10   8007              MAIN:
- 11   8007 CD 63 81             CALL CLEARSCR   ; Clean screen.
+ 11   8007 CD 71 81             CALL CLEARSCR   ; Clean screen.
  12   800A
  13   800A              ;-----------------------------------------------------------------------------------------
  14   800A              ; STARTINGSCREEN - Displays the start screen with its corresponding messages.
  15   800A              ;-----------------------------------------------------------------------------------------
  16   800A              STARTINGSCREEN:
- 17   800A CD 76 84             CALL LOADSTARTINGSCREEN
+ 17   800A CD 84 84             CALL LOADSTARTINGSCREEN
  18   800D                      ; Would you like to play? (y/n)
  19   800D 3E 39                LD A, $39              ; Attribute - Blue font with white background
  20   800F 06 06                LD B, 6                ; Row
  21   8011 0E 10                LD C, 16               ; Column
  22   8013 DD 21 46 80          LD IX, PLAYMESSAGE1    ; Would you
- 23   8017 CD F2 80             CALL PRINTAT
+ 23   8017 CD 00 81             CALL PRINTAT
  24   801A
  25   801A 3E 39                LD A, $39              ; Attribute - Blue font with white background
  26   801C 06 08                LD B, 8                ; Row
  27   801E 0E 0E                LD C, 14               ; Column
  28   8020 DD 21 51 80          LD IX, PLAYMESSAGE2    ; like to play
- 29   8024 CD F2 80             CALL PRINTAT
+ 29   8024 CD 00 81             CALL PRINTAT
  30   8027
  31   8027 3E 39                LD A, $39              ; Attribute - Blue font with white background
  32   8029 06 0A                LD B, 10               ; Row
  33   802B 0E 10                LD C, 16               ; Column
  34   802D DD 21 5F 80          LD IX, PLAYMESSAGE3    ; (Y/N)
- 35   8031 CD F2 80             CALL PRINTAT
+ 35   8031 CD 00 81             CALL PRINTAT
  36   8034
  37   8034                      ; Cursor
  38   8034 21 57 59             LD HL, $5800 + 10 * 32 + 23    ; Row 10, column 23
@@ -65,14 +65,14 @@
   2+  8066              ; GAMESCREEN - Displays the game screen with its corresponding messages.
   3+  8066              ;-----------------------------------------------------------------------------------------
   4+  8066              GAMESCREEN:
-  5+  8066 CD 63 81             CALL CLEARSCR   ; Clean screen.
+  5+  8066 CD 71 81             CALL CLEARSCR   ; Clean screen.
   6+  8069
   7+  8069                      ; Game
   8+  8069 3E 04                LD A, $04           ; Attribute - Green
   9+  806B 06 02                LD B, 2             ; Row
  10+  806D 0E 02                LD C, 2             ; Column
  11+  806F DD 21 78 80          LD IX, GAMEMESSAGE  ; Game
- 12+  8073 CD F2 80             CALL PRINTAT
+ 12+  8073 CD 00 81             CALL PRINTAT
  13+  8076              ;-----------------------------------------------------------------------------------------
  14+  8076
  15+  8076              ;-----------------------------------------------------------------------------------------
@@ -92,23 +92,23 @@
   2+  807D              ; ENDINGSCREEN - Displays the end screen with its corresponding messages.
   3+  807D              ;-----------------------------------------------------------------------------------------
   4+  807D              ENDINGSCREEN:
-  5+  807D CD 63 81             CALL CLEARSCR   ; Clean screen.
+  5+  807D CD 71 81             CALL CLEARSCR   ; Clean screen.
   6+  8080
-  7+  8080 CD 8B 9F             CALL LOADENDINGSCREEN
+  7+  8080 CD 99 9F             CALL LOADENDINGSCREEN
   8+  8083
   9+  8083                      ; Bye!
  10+  8083 3E 3B                LD A, $3B               ; Attribute - Pink font with white background
  11+  8085 06 04                LD B, 4                 ; Row
  12+  8087 0E 00                LD C, 0                 ; Column
  13+  8089 DD 21 C0 80          LD IX, BYEMESSAGE       ; Bye!
- 14+  808D CD F2 80             CALL PRINTAT
+ 14+  808D CD 00 81             CALL PRINTAT
  15+  8090
  16+  8090                      ; Play again? (Y/N)
  17+  8090 3E 3B                LD A, $3B               ; Attribute - Pink font with white background
  18+  8092 06 06                LD B, 6                 ; Row
  19+  8094 0E 00                LD C, 0                 ; Column
  20+  8096 DD 21 C5 80          LD IX, PLAYAGAINMESSAGE ; Play again? (Y/N)
- 21+  809A CD F2 80             CALL PRINTAT
+ 21+  809A CD 00 81             CALL PRINTAT
  22+  809D
  23+  809D                      ; Cursor
  24+  809D 21 D1 58             LD HL, $5800 + 6 * 32 + 17    ; Row 6, column 17
@@ -122,7 +122,7 @@
  32+  80AD 06 08                LD B, 8
  33+  80AF 0E 0B                LD C, 11
  34+  80B1 DD 21 D7 80          LD IX, ENDMESSAGE       ; End!
- 35+  80B5 CD F2 80             CALL PRINTAT
+ 35+  80B5 CD 00 81             CALL PRINTAT
  36+  80B8 21 D1 58             LD HL, $5800 + 6 * 32 + 17    ; Row 10, column 23
  37+  80BB 36 38                LD (HL), $38
  38+  80BD
@@ -146,265 +146,274 @@
   3+  80DC              ;	OUT - A = 1 if Y key is pressed.
   4+  80DC              ;-----------------------------------------------------------------------------------------
   5+  80DC              READYKEY:
-  6+  80DC 3E DF                LD A, $DF       ; Keys: Y, U, I, O, P
-  7+  80DE DB FE                IN A, ($FE)
-  8+  80E0 CB 67                BIT 4, A        ; Key Y
-  9+  80E2 20 03                JR NZ, READNKEY
- 10+  80E4 3E 01                LD A, 1
- 11+  80E6 C9                   RET
- 12+  80E7              ;-----------------------------------------------------------------------------------------
- 13+  80E7
- 14+  80E7              ;-----------------------------------------------------------------------------------------
- 15+  80E7              ; READNKEY - Identifies whether the user presses the N key.
- 16+  80E7              ;	OUT - A = 2 if N key is pressed.
- 17+  80E7              ;-----------------------------------------------------------------------------------------
- 18+  80E7              READNKEY:
- 19+  80E7 3E 7F                LD A, $7F       ; Keys: B, N, M, SYMB, SPACE
- 20+  80E9 DB FE                IN A, ($FE)
- 21+  80EB CB 5F                BIT 3, A        ; Key N
- 22+  80ED 20 ED                JR NZ, READYKEY
- 23+  80EF 3E 02                LD A, 2
- 24+  80F1 C9                   RET
- 25+  80F2              ;-----------------------------------------------------------------------------------------
- 26+  80F2
+  6+  80DC 01 FE DF             LD BC, $DFFE       ; Keys: Y, U, I, O, P
+  7+  80DF ED 78                IN A, (C)
+  8+  80E1 CB 67                BIT 4, A        ; Key Y
+  9+  80E3 20 09                JR NZ, READNKEY
+ 10+  80E5              LOOPY:
+ 11+  80E5 ED 78                IN A, (C)
+ 12+  80E7 FE FF                CP $FF
+ 13+  80E9 20 FA                JR NZ, LOOPY
+ 14+  80EB 3E 01                LD A, 1
+ 15+  80ED C9                   RET
+ 16+  80EE              ;-----------------------------------------------------------------------------------------
+ 17+  80EE
+ 18+  80EE              ;-----------------------------------------------------------------------------------------
+ 19+  80EE              ; READNKEY - Identifies whether the user presses the N key.
+ 20+  80EE              ;	OUT - A = 2 if N key is pressed.
+ 21+  80EE              ;-----------------------------------------------------------------------------------------
+ 22+  80EE              READNKEY:
+ 23+  80EE 3E 7F                LD A, $7F       ; Keys: B, N, M, SYMB, SPACE
+ 24+  80F0 DB FE                IN A, ($FE)
+ 25+  80F2 CB 5F                BIT 3, A        ; Key N
+ 26+  80F4 20 E6                JR NZ, READYKEY
+ 27+  80F6              LOOPN:
+ 28+  80F6 ED 78                IN A, (C)
+ 29+  80F8 FE FF                CP $FF
+ 30+  80FA 20 FA                JR NZ, LOOPN
+ 31+  80FC 3E 02                LD A, 2
+ 32+  80FE C9                   RET
+ 33+  80FF C9                   RET
+ 34+  8100              ;-----------------------------------------------------------------------------------------
+ 35+  8100
 # file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\ReadKey.asm
- 58   80F2                      INCLUDE "Printat.asm"
+ 58   8100                      INCLUDE "Printat.asm"
 # file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\Printat.asm
-  1+  80F2              ; -------------------------------
-  2+  80F2              ; ZX Spectrum Text print library
-  3+  80F2              ; Daniel León - AOC - UFV 2020
-  4+  80F2              ; -------------------------------
-  5+  80F2
-  6+  80F2
-  7+  80F2              ; ----------------------------------------------------------------------------------------
-  8+  80F2              ; PRINTAT - Print a string in a position and attributes as per registers:
-  9+  80F2              ;		IN	A	: Bit 7=1 For Flash / Bit 6=1 For Brigh / Bit 5,4,3 for Paper / Bit 2,1,0 for Ink
- 10+  80F2              ;		IN	B	: Row 0..23
- 11+  80F2              ;		IN	C	: Column 0..31
- 12+  80F2              ;		IN	IX	: Address of text (Text must end in a 0)
- 13+  80F2              ; ----------------------------------------------------------------------------------------
- 14+  80F2 CD 01 81     PRINTAT:	CALL PREP_PRT				; Update Attribute var &Screen & Attributes pointers
- 15+  80F5              ; ----------------------------------------------------------------------------------------
- 16+  80F5              ;		VVV Do not move PRINTSTR below as PRINTAT continues into PRINTSTR routine
- 17+  80F5              ; ----------------------------------------------------------------------------------------
- 18+  80F5              ; PRINTSTR - Prints String - IX Points to the String start
- 19+  80F5              ; ----------------------------------------------------------------------------------------
- 20+  80F5 DD 7E 00     PRINTSTR:   LD A,(IX)					; A Contains first char to print
- 21+  80F8 B7           			OR A						; check for end of string (0)
- 22+  80F9 C8           			RET Z						; Finish printing if 0
- 23+  80FA CD 2F 81     			CALL PRINTCHNUM
- 24+  80FD DD 23        			INC IX						; Move to next char in string
- 25+  80FF 18 F4        			JR PRINTSTR					; Start over printing sequence
- 26+  8101              ; ----------------------------------------------------------------------------------------
- 27+  8101
- 28+  8101
- 29+  8101              ;-----------------------------------------------------------------------------------------
- 30+  8101              ; PREP_PRT - Updates Print_Attr, SCR & ATTR Vars
- 31+  8101              ;-----------------------------------------------------------------------------------------
- 32+  8101 32 75 81     PREP_PRT:	LD (PRINT_ATTR),A			; Set Attribute
- 33+  8104 CD 0A 81     PREP_PRT_2:	CALL CRtoSCREEN
- 34+  8107 C3 1C 81     			JP CRtoATTR
- 35+  810A              ;-----------------------------------------------------------------------------------------
- 36+  810A
- 37+  810A              ;-----------------------------------------------------------------------------------------
- 38+  810A              ; CRtoSCREEN - Converts a scr char coord into a SCREEN Address   b,c = y,x positions
- 39+  810A              ;	IN  - B=Row, C=Column
- 40+  810A              ;	OUT - HL=Address in screen also stored in (SCR_CUR_PTR)
- 41+  810A              ;	Conversion:
- 42+  810A              ;			Row FFfff   Column CCCCC
- 43+  810A              ;			HL=%010FF000 fffCCCCC
- 44+  810A              ;-----------------------------------------------------------------------------------------
- 45+  810A              CRtoSCREEN:
- 46+  810A 78           			LD A,B						; %___FFfff
- 47+  810B F6 40        			OR #40						; %010FFfff
- 48+  810D E6 F8        			AND #F8						; %010FF000
- 49+  810F 67           			LD H,A
- 50+  8110
- 51+  8110 78           			LD A,B						; %___FFfff
- 52+  8111 E6 07        			AND #7						; %00000fff
- 53+  8113 0F           			RRCA						; %f00000ff
- 54+  8114 0F           			RRCA						; %ff00000f
- 55+  8115 0F           			RRCA						; %fff00000
- 56+  8116 B1           			OR C						; %fffCCCCC
- 57+  8117 6F           			LD L,A
- 58+  8118 22 71 81                 LD (SCR_CUR_PTR),HL			; Update Variable
- 59+  811B C9                       RET
- 60+  811C              ; ----------------------------------------------------------------------------------------
- 61+  811C
- 62+  811C
- 63+  811C
- 64+  811C              ;-----------------------------------------------------------------------------------------
- 65+  811C              ; CRtoATTR - Converts a screen char coord  into a ATTR Address  b,c = y,x positions
- 66+  811C              ;	IN  - B=Row, C=Column
- 67+  811C              ;	OUT - HL=Address in screen also stored in (SCR_ATTR_PTR)
- 68+  811C              ;	Conversion:
- 69+  811C              ;			Row FFfff   Column CCCCC
- 70+  811C              ;			HL=%010110FF fffCCCCC
- 71+  811C              ;-----------------------------------------------------------------------------------------
- 72+  811C              CRtoATTR:
- 73+  811C 78           			LD A,B						; %___FFfff
- 74+  811D 0F           			RRCA						; %f000FFff
- 75+  811E 0F           			RRCA						; %ff000FFf
- 76+  811F 0F           			RRCA						; %fff000FF
- 77+  8120 6F           			LD L,A
- 78+  8121 E6 03        			AND 3						; %000000FF	value of FF can be only 00,01,10
- 79+  8123 F6 58        			OR #58						; %010110FF value will be #58, #59 or #5A
- 80+  8125 67           			LD H,A
- 81+  8126
- 82+  8126 7D           			LD A,L						; %fff000FF
- 83+  8127 E6 E0        			AND #E0						; %fff00000
- 84+  8129 B1           			OR C						; %fffCCCCC
- 85+  812A 6F           			LD L,A
- 86+  812B
- 87+  812B 22 73 81                 LD (SCR_ATTR_PTR),HL		; Update Variable
- 88+  812E C9                       RET
- 89+  812F              ; ----------------------------------------------------------------------------------------
- 90+  812F
- 91+  812F
- 92+  812F
- 93+  812F              ; ----------------------------------------------------------------------------------------
- 94+  812F              ; PRINTCHNUM - Prints Char Number N (stored in A)
- 95+  812F              ;-----------------------------------------------------------------------------------------
- 96+  812F              PRINTCHNUM:	;SUB 32						; Adjust Ascii to charset
- 97+  812F 26 00        			LD H,0						; Multiply value by 8 to get to right Char in Charset
- 98+  8131 6F           			LD L,A
- 99+  8132 29           			ADD HL,HL
-100+  8133 29           			ADD HL,HL
-101+  8134 29           			ADD HL,HL
-102+  8135 11 76 80     			LD DE, CHARSET-(8*32)		; Optimize in compile time (instead of sub 32)
-103+  8138 19           			ADD HL,DE
-104+  8139 EB           			EX  DE,HL					;Value in DE
-105+  813A              			; Continues to printchar below
-106+  813A              ; ----------------------------------------------------------------------------------------
-107+  813A
-108+  813A
-109+  813A              ; ----------------------------------------------------------------------------------------
-110+  813A              ; PRINTCHAR - Prints Char  (DE points to the char. Uses HL as last Cur Pointer)
-111+  813A              ; ----------------------------------------------------------------------------------------
-112+  813A              PRINTCHAR:
-113+  813A 06 08        			LD B,8						; 8 Lines per char
-114+  813C 2A 71 81                 LD HL, (SCR_CUR_PTR)		; Load Cursor Pointer y,x
-115+  813F
-116+  813F 1A           BYTEPCHAR:	LD A,(DE)					; Get Char to be printed, first line
-117+  8140 77           			LD (HL),A					; Move to Printing location
-118+  8141 24                       INC H						; inc H so next line in char (ZX Spectrum Screen RAM)
-119+  8142 13                       INC DE 						; next line to be printed
-120+  8143 10 FA                    DJNZ BYTEPCHAR				; Repeat 8 lines
-121+  8145 3A 75 81                 LD A,(PRINT_ATTR) 			; Load Attributes to print char with
-122+  8148 2A 73 81                 LD HL, (SCR_ATTR_PTR)
-123+  814B 77                       LD (HL),A
-124+  814C 21 73 81                 LD HL, SCR_ATTR_PTR			; Get pointer to ATTR
-125+  814F 34                       INC (HL)					; Move Attribute cursor to next char
-126+  8150 21 71 81     			LD HL, SCR_CUR_PTR
-127+  8153 34           			INC (HL)					; update Cursor pointer to next position
-128+  8154 C9                       RET
-129+  8155              ; ----------------------------------------------------------------------------------------
-130+  8155
-131+  8155
-132+  8155
-133+  8155              ; ----------------------------------------------------------------------------------------
-134+  8155              ; INK2PAPER - moves ink of attribute stored in (PRINT_ATTR) to paper and sets ink to 0
-135+  8155              ; 				Sets bright 1 and flash 0
-136+  8155              ; ----------------------------------------------------------------------------------------
-137+  8155 3A 75 81     INK2PAPER:	LD A, (PRINT_ATTR)		    ; Get storedAttribute
-138+  8158 E6 07                    AND 7						; get Attr INK in A
-139+  815A 07           			RLCA
-140+  815B 07           			RLCA
-141+  815C 07           			RLCA						; move Ink to Paper
-142+  815D F6 40        			OR 64						; ink 0 bright 1
-143+  815F 32 75 81     			LD (PRINT_ATTR),A		    ; Get storedAttribute
-144+  8162 C9           			RET
-145+  8163              ; ----------------------------------------------------------------------------------------
-146+  8163
-147+  8163
-148+  8163
-149+  8163
-150+  8163 21 00 40     CLEARSCR:	LD HL,$4000					; Erases screen by writing 0 to all pixels and attributes
-151+  8166 11 01 40     			LD DE,$4001
-152+  8169 01 FF 1A     			LD BC,6911
-153+  816C 36 00        			LD (HL),0
-154+  816E ED B0        			LDIR
-155+  8170 C9           			RET
-156+  8171
-157+  8171
-158+  8171              SCR_CUR_PTR
-158+  8171 00 00          	db $00, $00				; Cursor Pointer in Screen (2 bytes) (HL)
-159+  8173 00 00        SCR_ATTR_PTR: 	db $00, $00				; Attr Pointer in Screen (2 bytes) (HL)
-160+  8175 00           PRINT_ATTR:		db $00					; Attribute used by printchar routine (1 byte)
-161+  8176
-162+  8176              CHARSET: incbin "charset.bin"			; Charset used
-163+  8476
+  1+  8100              ; -------------------------------
+  2+  8100              ; ZX Spectrum Text print library
+  3+  8100              ; Daniel León - AOC - UFV 2020
+  4+  8100              ; -------------------------------
+  5+  8100
+  6+  8100
+  7+  8100              ; ----------------------------------------------------------------------------------------
+  8+  8100              ; PRINTAT - Print a string in a position and attributes as per registers:
+  9+  8100              ;		IN	A	: Bit 7=1 For Flash / Bit 6=1 For Brigh / Bit 5,4,3 for Paper / Bit 2,1,0 for Ink
+ 10+  8100              ;		IN	B	: Row 0..23
+ 11+  8100              ;		IN	C	: Column 0..31
+ 12+  8100              ;		IN	IX	: Address of text (Text must end in a 0)
+ 13+  8100              ; ----------------------------------------------------------------------------------------
+ 14+  8100 CD 0F 81     PRINTAT:	CALL PREP_PRT				; Update Attribute var &Screen & Attributes pointers
+ 15+  8103              ; ----------------------------------------------------------------------------------------
+ 16+  8103              ;		VVV Do not move PRINTSTR below as PRINTAT continues into PRINTSTR routine
+ 17+  8103              ; ----------------------------------------------------------------------------------------
+ 18+  8103              ; PRINTSTR - Prints String - IX Points to the String start
+ 19+  8103              ; ----------------------------------------------------------------------------------------
+ 20+  8103 DD 7E 00     PRINTSTR:   LD A,(IX)					; A Contains first char to print
+ 21+  8106 B7           			OR A						; check for end of string (0)
+ 22+  8107 C8           			RET Z						; Finish printing if 0
+ 23+  8108 CD 3D 81     			CALL PRINTCHNUM
+ 24+  810B DD 23        			INC IX						; Move to next char in string
+ 25+  810D 18 F4        			JR PRINTSTR					; Start over printing sequence
+ 26+  810F              ; ----------------------------------------------------------------------------------------
+ 27+  810F
+ 28+  810F
+ 29+  810F              ;-----------------------------------------------------------------------------------------
+ 30+  810F              ; PREP_PRT - Updates Print_Attr, SCR & ATTR Vars
+ 31+  810F              ;-----------------------------------------------------------------------------------------
+ 32+  810F 32 83 81     PREP_PRT:	LD (PRINT_ATTR),A			; Set Attribute
+ 33+  8112 CD 18 81     PREP_PRT_2:	CALL CRtoSCREEN
+ 34+  8115 C3 2A 81     			JP CRtoATTR
+ 35+  8118              ;-----------------------------------------------------------------------------------------
+ 36+  8118
+ 37+  8118              ;-----------------------------------------------------------------------------------------
+ 38+  8118              ; CRtoSCREEN - Converts a scr char coord into a SCREEN Address   b,c = y,x positions
+ 39+  8118              ;	IN  - B=Row, C=Column
+ 40+  8118              ;	OUT - HL=Address in screen also stored in (SCR_CUR_PTR)
+ 41+  8118              ;	Conversion:
+ 42+  8118              ;			Row FFfff   Column CCCCC
+ 43+  8118              ;			HL=%010FF000 fffCCCCC
+ 44+  8118              ;-----------------------------------------------------------------------------------------
+ 45+  8118              CRtoSCREEN:
+ 46+  8118 78           			LD A,B						; %___FFfff
+ 47+  8119 F6 40        			OR #40						; %010FFfff
+ 48+  811B E6 F8        			AND #F8						; %010FF000
+ 49+  811D 67           			LD H,A
+ 50+  811E
+ 51+  811E 78           			LD A,B						; %___FFfff
+ 52+  811F E6 07        			AND #7						; %00000fff
+ 53+  8121 0F           			RRCA						; %f00000ff
+ 54+  8122 0F           			RRCA						; %ff00000f
+ 55+  8123 0F           			RRCA						; %fff00000
+ 56+  8124 B1           			OR C						; %fffCCCCC
+ 57+  8125 6F           			LD L,A
+ 58+  8126 22 7F 81                 LD (SCR_CUR_PTR),HL			; Update Variable
+ 59+  8129 C9                       RET
+ 60+  812A              ; ----------------------------------------------------------------------------------------
+ 61+  812A
+ 62+  812A
+ 63+  812A
+ 64+  812A              ;-----------------------------------------------------------------------------------------
+ 65+  812A              ; CRtoATTR - Converts a screen char coord  into a ATTR Address  b,c = y,x positions
+ 66+  812A              ;	IN  - B=Row, C=Column
+ 67+  812A              ;	OUT - HL=Address in screen also stored in (SCR_ATTR_PTR)
+ 68+  812A              ;	Conversion:
+ 69+  812A              ;			Row FFfff   Column CCCCC
+ 70+  812A              ;			HL=%010110FF fffCCCCC
+ 71+  812A              ;-----------------------------------------------------------------------------------------
+ 72+  812A              CRtoATTR:
+ 73+  812A 78           			LD A,B						; %___FFfff
+ 74+  812B 0F           			RRCA						; %f000FFff
+ 75+  812C 0F           			RRCA						; %ff000FFf
+ 76+  812D 0F           			RRCA						; %fff000FF
+ 77+  812E 6F           			LD L,A
+ 78+  812F E6 03        			AND 3						; %000000FF	value of FF can be only 00,01,10
+ 79+  8131 F6 58        			OR #58						; %010110FF value will be #58, #59 or #5A
+ 80+  8133 67           			LD H,A
+ 81+  8134
+ 82+  8134 7D           			LD A,L						; %fff000FF
+ 83+  8135 E6 E0        			AND #E0						; %fff00000
+ 84+  8137 B1           			OR C						; %fffCCCCC
+ 85+  8138 6F           			LD L,A
+ 86+  8139
+ 87+  8139 22 81 81                 LD (SCR_ATTR_PTR),HL		; Update Variable
+ 88+  813C C9                       RET
+ 89+  813D              ; ----------------------------------------------------------------------------------------
+ 90+  813D
+ 91+  813D
+ 92+  813D
+ 93+  813D              ; ----------------------------------------------------------------------------------------
+ 94+  813D              ; PRINTCHNUM - Prints Char Number N (stored in A)
+ 95+  813D              ;-----------------------------------------------------------------------------------------
+ 96+  813D              PRINTCHNUM:	;SUB 32						; Adjust Ascii to charset
+ 97+  813D 26 00        			LD H,0						; Multiply value by 8 to get to right Char in Charset
+ 98+  813F 6F           			LD L,A
+ 99+  8140 29           			ADD HL,HL
+100+  8141 29           			ADD HL,HL
+101+  8142 29           			ADD HL,HL
+102+  8143 11 84 80     			LD DE, CHARSET-(8*32)		; Optimize in compile time (instead of sub 32)
+103+  8146 19           			ADD HL,DE
+104+  8147 EB           			EX  DE,HL					;Value in DE
+105+  8148              			; Continues to printchar below
+106+  8148              ; ----------------------------------------------------------------------------------------
+107+  8148
+108+  8148
+109+  8148              ; ----------------------------------------------------------------------------------------
+110+  8148              ; PRINTCHAR - Prints Char  (DE points to the char. Uses HL as last Cur Pointer)
+111+  8148              ; ----------------------------------------------------------------------------------------
+112+  8148              PRINTCHAR:
+113+  8148 06 08        			LD B,8						; 8 Lines per char
+114+  814A 2A 7F 81                 LD HL, (SCR_CUR_PTR)		; Load Cursor Pointer y,x
+115+  814D
+116+  814D 1A           BYTEPCHAR:	LD A,(DE)					; Get Char to be printed, first line
+117+  814E 77           			LD (HL),A					; Move to Printing location
+118+  814F 24                       INC H						; inc H so next line in char (ZX Spectrum Screen RAM)
+119+  8150 13                       INC DE 						; next line to be printed
+120+  8151 10 FA                    DJNZ BYTEPCHAR				; Repeat 8 lines
+121+  8153 3A 83 81                 LD A,(PRINT_ATTR) 			; Load Attributes to print char with
+122+  8156 2A 81 81                 LD HL, (SCR_ATTR_PTR)
+123+  8159 77                       LD (HL),A
+124+  815A 21 81 81                 LD HL, SCR_ATTR_PTR			; Get pointer to ATTR
+125+  815D 34                       INC (HL)					; Move Attribute cursor to next char
+126+  815E 21 7F 81     			LD HL, SCR_CUR_PTR
+127+  8161 34           			INC (HL)					; update Cursor pointer to next position
+128+  8162 C9                       RET
+129+  8163              ; ----------------------------------------------------------------------------------------
+130+  8163
+131+  8163
+132+  8163
+133+  8163              ; ----------------------------------------------------------------------------------------
+134+  8163              ; INK2PAPER - moves ink of attribute stored in (PRINT_ATTR) to paper and sets ink to 0
+135+  8163              ; 				Sets bright 1 and flash 0
+136+  8163              ; ----------------------------------------------------------------------------------------
+137+  8163 3A 83 81     INK2PAPER:	LD A, (PRINT_ATTR)		    ; Get storedAttribute
+138+  8166 E6 07                    AND 7						; get Attr INK in A
+139+  8168 07           			RLCA
+140+  8169 07           			RLCA
+141+  816A 07           			RLCA						; move Ink to Paper
+142+  816B F6 40        			OR 64						; ink 0 bright 1
+143+  816D 32 83 81     			LD (PRINT_ATTR),A		    ; Get storedAttribute
+144+  8170 C9           			RET
+145+  8171              ; ----------------------------------------------------------------------------------------
+146+  8171
+147+  8171
+148+  8171
+149+  8171
+150+  8171 21 00 40     CLEARSCR:	LD HL,$4000					; Erases screen by writing 0 to all pixels and attributes
+151+  8174 11 01 40     			LD DE,$4001
+152+  8177 01 FF 1A     			LD BC,6911
+153+  817A 36 00        			LD (HL),0
+154+  817C ED B0        			LDIR
+155+  817E C9           			RET
+156+  817F
+157+  817F
+158+  817F              SCR_CUR_PTR
+158+  817F 00 00          	db $00, $00				; Cursor Pointer in Screen (2 bytes) (HL)
+159+  8181 00 00        SCR_ATTR_PTR: 	db $00, $00				; Attr Pointer in Screen (2 bytes) (HL)
+160+  8183 00           PRINT_ATTR:		db $00					; Attribute used by printchar routine (1 byte)
+161+  8184
+162+  8184              CHARSET: incbin "charset.bin"			; Charset used
+163+  8484
 # file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\Printat.asm
- 59   8476                      INCLUDE "LoadStartingScreen.asm"
+ 59   8484                      INCLUDE "LoadStartingScreen.asm"
 # file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\LoadStartingScreen.asm
-  1+  8476              ;-----------------------------------------------------------------------------------------
-  2+  8476              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
-  3+  8476              ;-----------------------------------------------------------------------------------------
-  4+  8476              LOADSTARTINGSCREEN:
-  5+  8476 21 8B 84         LD HL, LOADSTARTINGSCREEN_START ; HL = Starting addres of screen data
-  6+  8479
-  7+  8479                  ; Save used registers
-  8+  8479 C5               PUSH BC
-  9+  847A D5               PUSH DE
- 10+  847B
- 11+  847B 11 00 40         LD DE, $4000 ; Display to video memory area
- 12+  847E 01 00 1B         LD BC, 6912  ; VidkeoRAM size
- 13+  8481              ;-----------------------------------------------------------------------------------------
- 14+  8481
- 15+  8481              ;-----------------------------------------------------------------------------------------
- 16+  8481              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
- 17+  8481              ;-----------------------------------------------------------------------------------------
- 18+  8481              LOADSTARTINGSCREEN_LOOP:
- 19+  8481 ED A0            LDI ; (DE) = (HL) , DE++, HL++, BC--
- 20+  8483
- 21+  8483 78               LD A, B ; Check if BC is 0
- 22+  8484 B1               OR C ; BC = 0 <=> B|C=0
- 23+  8485 C2 81 84         JP NZ, LOADSTARTINGSCREEN_LOOP ; Next display byte
- 24+  8488
- 25+  8488                  ; Retrieve used registers
- 26+  8488 D1               POP DE
- 27+  8489 C1               POP BC
- 28+  848A
- 29+  848A C9               RET
- 30+  848B              ;-----------------------------------------------------------------------------------------
- 31+  848B
- 32+  848B              LOADSTARTINGSCREEN_START: INCBIN "StartingScreenTetris.scr"
- 33+  9F8B
+  1+  8484              ;-----------------------------------------------------------------------------------------
+  2+  8484              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+  3+  8484              ;-----------------------------------------------------------------------------------------
+  4+  8484              LOADSTARTINGSCREEN:
+  5+  8484 21 99 84         LD HL, LOADSTARTINGSCREEN_START ; HL = Starting addres of screen data
+  6+  8487
+  7+  8487                  ; Save used registers
+  8+  8487 C5               PUSH BC
+  9+  8488 D5               PUSH DE
+ 10+  8489
+ 11+  8489 11 00 40         LD DE, $4000 ; Display to video memory area
+ 12+  848C 01 00 1B         LD BC, 6912  ; VidkeoRAM size
+ 13+  848F              ;-----------------------------------------------------------------------------------------
+ 14+  848F
+ 15+  848F              ;-----------------------------------------------------------------------------------------
+ 16+  848F              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+ 17+  848F              ;-----------------------------------------------------------------------------------------
+ 18+  848F              LOADSTARTINGSCREEN_LOOP:
+ 19+  848F ED A0            LDI ; (DE) = (HL) , DE++, HL++, BC--
+ 20+  8491
+ 21+  8491 78               LD A, B ; Check if BC is 0
+ 22+  8492 B1               OR C ; BC = 0 <=> B|C=0
+ 23+  8493 C2 8F 84         JP NZ, LOADSTARTINGSCREEN_LOOP ; Next display byte
+ 24+  8496
+ 25+  8496                  ; Retrieve used registers
+ 26+  8496 D1               POP DE
+ 27+  8497 C1               POP BC
+ 28+  8498
+ 29+  8498 C9               RET
+ 30+  8499              ;-----------------------------------------------------------------------------------------
+ 31+  8499
+ 32+  8499              LOADSTARTINGSCREEN_START: INCBIN "StartingScreenTetris.scr"
+ 33+  9F99
 # file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\LoadStartingScreen.asm
- 60   9F8B                      INCLUDE "LoadEndingScreen.asm"
+ 60   9F99                      INCLUDE "LoadEndingScreen.asm"
 # file opened: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\LoadEndingScreen.asm
-  1+  9F8B              ;-----------------------------------------------------------------------------------------
-  2+  9F8B              ; LOADENDINGSCREEN - Displays the end screen with its corresponding messages.
-  3+  9F8B              ;-----------------------------------------------------------------------------------------
-  4+  9F8B              LOADENDINGSCREEN:
-  5+  9F8B 21 A0 9F         LD HL, LOADSTARTINGSCREEN_END ; HL = Starting addres of screen data
-  6+  9F8E
-  7+  9F8E                  ; Save used registers
-  8+  9F8E C5               PUSH BC
-  9+  9F8F D5               PUSH DE
- 10+  9F90
- 11+  9F90 11 00 40         LD DE, $4000 ; Display to video memory area
- 12+  9F93 01 00 1B         LD BC, 6912  ; VidkeoRAM size
- 13+  9F96              ;-----------------------------------------------------------------------------------------
- 14+  9F96
- 15+  9F96              ;-----------------------------------------------------------------------------------------
- 16+  9F96              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
- 17+  9F96              ;-----------------------------------------------------------------------------------------
- 18+  9F96              LOADENDINGSCREEN_LOOP:
- 19+  9F96 ED A0            LDI ; (DE) = (HL) , DE++, HL++, BC--
- 20+  9F98
- 21+  9F98 78               LD A, B ; Check if BC is 0
- 22+  9F99 B1               OR C ; BC = 0 <=> B|C=0
- 23+  9F9A C2 96 9F         JP NZ, LOADENDINGSCREEN_LOOP ; Next display byte
- 24+  9F9D
- 25+  9F9D                  ; Retrieve used registers
- 26+  9F9D D1               POP DE
- 27+  9F9E C1               POP BC
- 28+  9F9F
- 29+  9F9F C9               RET
- 30+  9FA0              ;-----------------------------------------------------------------------------------------
- 31+  9FA0
- 32+  9FA0              LOADSTARTINGSCREEN_END: INCBIN "EndingScreenTetris.scr"
- 33+  BAA0
+  1+  9F99              ;-----------------------------------------------------------------------------------------
+  2+  9F99              ; LOADENDINGSCREEN - Displays the end screen with its corresponding messages.
+  3+  9F99              ;-----------------------------------------------------------------------------------------
+  4+  9F99              LOADENDINGSCREEN:
+  5+  9F99 21 AE 9F         LD HL, LOADSTARTINGSCREEN_END ; HL = Starting addres of screen data
+  6+  9F9C
+  7+  9F9C                  ; Save used registers
+  8+  9F9C C5               PUSH BC
+  9+  9F9D D5               PUSH DE
+ 10+  9F9E
+ 11+  9F9E 11 00 40         LD DE, $4000 ; Display to video memory area
+ 12+  9FA1 01 00 1B         LD BC, 6912  ; VidkeoRAM size
+ 13+  9FA4              ;-----------------------------------------------------------------------------------------
+ 14+  9FA4
+ 15+  9FA4              ;-----------------------------------------------------------------------------------------
+ 16+  9FA4              ; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+ 17+  9FA4              ;-----------------------------------------------------------------------------------------
+ 18+  9FA4              LOADENDINGSCREEN_LOOP:
+ 19+  9FA4 ED A0            LDI ; (DE) = (HL) , DE++, HL++, BC--
+ 20+  9FA6
+ 21+  9FA6 78               LD A, B ; Check if BC is 0
+ 22+  9FA7 B1               OR C ; BC = 0 <=> B|C=0
+ 23+  9FA8 C2 A4 9F         JP NZ, LOADENDINGSCREEN_LOOP ; Next display byte
+ 24+  9FAB
+ 25+  9FAB                  ; Retrieve used registers
+ 26+  9FAB D1               POP DE
+ 27+  9FAC C1               POP BC
+ 28+  9FAD
+ 29+  9FAD C9               RET
+ 30+  9FAE              ;-----------------------------------------------------------------------------------------
+ 31+  9FAE
+ 32+  9FAE              LOADSTARTINGSCREEN_END: INCBIN "EndingScreenTetris.scr"
+ 33+  BAAE
 # file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\LoadEndingScreen.asm
 # file closed: C:\Users\rmore\Documentos\Universidad\2ndo\AOC\Arquitectura-y-organizacion-de-computadore\GameScreens\src\StartScreen.asm

@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------------------
-; LOADENDINGSCREEN - Displays the end screen with its corresponding messages.
+; LOADENDINGSCREEN -  Set values to paint the graphic.
 ;-----------------------------------------------------------------------------------------
 LOADENDINGSCREEN:
     LD HL, LOADSTARTINGSCREEN_END ; HL = Starting addres of screen data
@@ -13,7 +13,7 @@ LOADENDINGSCREEN:
 ;-----------------------------------------------------------------------------------------
 
 ;-----------------------------------------------------------------------------------------
-; LOADENDINGSCREEN_LOOP - Displays the end screen with its corresponding messages.
+; LOADENDINGSCREEN_LOOP - Displays the end screen graphic.
 ;-----------------------------------------------------------------------------------------
 LOADENDINGSCREEN_LOOP:
     LDI ; (DE) = (HL) , DE++, HL++, BC--
